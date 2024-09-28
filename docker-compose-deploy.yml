@@ -1,0 +1,30 @@
+services:
+  monitoring:
+    image: ghcr.io/pohlproductions/server-monitoring-spring:latest
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://monitoring-db:5432/monitoring
+      - SPRING_DATASOURCE_USERNAME=some-user
+      - SPRING_DATASOURCE_PASSWORD=SuperSecretPassword
+      - MONITORING_SERVER_URL=localhost
+      - MONITORING_INTERVAL=1000
+    depends_on:
+      monitoring-db:
+        condition: service_healthy
+  monitoring-db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: some-user
+      POSTGRES_PASSWORD: SuperSecretPassword
+      POSTGRES_DB: monitoring
+    ports:
+      - "5432:5432"
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U username -d monitoring" ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  database:

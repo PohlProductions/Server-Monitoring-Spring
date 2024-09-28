@@ -1,0 +1,6 @@
+services:
+  monitoring:
+    build:
+      .
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dbhost:5432/monitoring

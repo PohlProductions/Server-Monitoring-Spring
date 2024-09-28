@@ -1,0 +1,9 @@
+services:
+  monitoring-db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: monitoring
+    ports:
+      - "5432:5432"
